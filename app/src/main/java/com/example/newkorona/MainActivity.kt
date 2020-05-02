@@ -52,14 +52,14 @@ class Request {
     companion object{
         val url = "http://coronavirus-19-api.herokuapp.com/countries/?fbclid=IwAR1Dka65-zF7Gx6SenmP7gocy34ykgDANM4aM_tAnL66iaxYnHFjF0Mev8g"
     }
-    fun run():Array<Data>{
+    fun run():ArrayList<Data>{
         val repoListJsonStr = URL(url).readText()
 
-        val prasedData = Gson().fromJson(repoListJsonStr, Array<Data>::class.java) // próbowałem tu wstawić formę z array list ale nie działa i nie jestem pewien czemu
+        val prasedData = Gson().fromJson(repoListJsonStr, ArrayList<Data>::class.java) // próbowałem tu wstawić formę z array list ale nie działa i nie jestem pewien czemu
         Log.d(javaClass.simpleName, prasedData.toString())
         return prasedData
     }
 
 }
 
-val data:Array<Data> = Request().run()
+val data:ArrayList<Data> = Request().run()
