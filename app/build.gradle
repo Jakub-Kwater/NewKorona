@@ -3,6 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
@@ -38,4 +43,8 @@ dependencies {
 
     implementation "org.jetbrains.anko:anko-common:0.10.8" // zmiany wg MD,
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    //retrofit section
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
 }
