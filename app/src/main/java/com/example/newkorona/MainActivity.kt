@@ -33,33 +33,41 @@ class MainActivity : AppCompatActivity() {
 
         api.fetchAllCountries().enqueue(object : Callback<List<Country>>{
             override fun onFailure(call: Call<List<Country>>, t: Throwable) {
-                d("call","error")
+                d("TAG_KORONA","error" + t.message)
             }
             override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
-                d("call","ok")
+                showData(response.body()!!)
+                d("TAG_KORONA","ok")
+                d("TAG_KORONA", "List  size: " + response.body()!![2].country)
             }
         })
 
-        val countries = mutableListOf<Country>()
-        for (i in 0..20){
-            countries.add(Country("Freljord", 123,234,6,4,22, 23,23,234,234,5,4))
-        }
+//        val countries = mutableListOf<Country>()
+//        for (i in 0..20){
+//            countries.add(Country("Freljord",
+//                12343,
+//                234,
+//                6,
+//                4,
+//                22,
+//                23,
+//                23,
+//                234,
+//                234,
+//                5,
+//                4))
+//        }
 
+//        recyclerView.apply {
+//            layoutManager = LinearLayoutManager(this@MainActivity)
+//            adapter = MainAdapter(countries) // maybe
+//        }
+    }
+
+    private fun showData(countries: List<Country>) {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = MainAdapter(countries) // maybe
-
         }
-
-
     }
-
-
 }
-
-
-//class Data(val country: String, val cases: Int, val todayCases: Int, val deaths: Int, val todayDeaths: Int,
-//           val recovered: Int, val active: Int, val critical: Int, val casesPerOneMillion: Int,
-//           val deathsPerOneMillion: Int, val totalTests: Int, val testsPerOneMillion: Int)
-//
-//val data:Array<Data> = Request().run()
