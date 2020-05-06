@@ -7,11 +7,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 import android.util.Log
 import android.util.Log.d
+import android.widget.TextView
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.uiThread
 import java.net.URL
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.data_row.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,11 +65,14 @@ class MainActivity : AppCompatActivity() {
 //            adapter = MainAdapter(countries) // maybe
 //        }
     }
-
     private fun showData(countries: List<Country>) {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = MainAdapter(countries) // maybe
         }
+//        val country:TextView = findViewById(R.id.country_view) as TextView
+//        val cases:TextView = findViewById(R.id.cases_view) as TextView
+//
+//        searchView.setSearchableInfo(countries)
     }
 }
