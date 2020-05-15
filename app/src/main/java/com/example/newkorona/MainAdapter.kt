@@ -63,6 +63,15 @@ class MainAdapter(private val countries: List<Country>) : RecyclerView.Adapter<M
         val casesPM:TextView = itemView.casesPM_view
         val deathsPM:TextView = itemView.deathsPM_view
         val totalTest:TextView = itemView.totalTests_view
-        val testsPM:TextView = itemView.testsPM_view
+        val testsPM:TextView =  itemView.testsPM_view
+
+
     }
+
+
+
+    fun filteredList(filteredList:ArrayList<Country>){
+        println("Sernik")
+    }
+
 }

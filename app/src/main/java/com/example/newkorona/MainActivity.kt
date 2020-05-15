@@ -2,11 +2,14 @@ package com.example.newkorona
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 import android.util.Log
 import android.util.Log.d
+import android.widget.EditText
 import android.widget.TextView
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.longToast
@@ -26,6 +29,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val editText:EditText = findViewById(R.id.editText)
+
+        editText.addTextChangedListener(object:TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                filter(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        })
+
+
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://coronavirus-19-api.herokuapp.com/countries/?fbclid=IwAR0wZuXrAzDdY6q8rTQGLmun_-l6ZLVv6MLP8h67JC3Q2aHf8mVPRNpyNpU")
             .addConverterFactory(GsonConverterFactory.create())
@@ -33,16 +55,48 @@ class MainActivity : AppCompatActivity() {
 
         val api = retrofit.create(ApiService::class.java)
 
-        api.fetchAllCountries().enqueue(object : Callback<List<Country>>{
+
+        api.fetchAllCountries().enqueue(object : Callback<List<Country>> {
             override fun onFailure(call: Call<List<Country>>, t: Throwable) {
-                d("TAG_KORONA","error" + t.message)
+                d("TAG_KORONA", "error" + t.message)
             }
+
             override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
                 showData(response.body()!!)
-                d("TAG_KORONA","ok")
+                val valueForData = response.body()!!
+                d("TAG_KORONA", "ok")
                 d("TAG_KORONA", "List  size: " + response.body()!![2].country)
+
             }
         })
+
+        val listaDanych:List<Country> = api.fetchAllCountries().execute().body().orEmpty()
+
+        fun filter(text:String){
+            val filteredList:ArrayList<Country> = ArrayList<Country>()
+
+            for(item:Country in listaDanych){
+                if (item.country.toString().toLowerCase().contains(text.toLowerCase())){
+                    filteredList.add(item)
+                }
+            }
+
+            MainAdapter.filteredList()
+
+
+        }
+    }
+
+    private fun showData(countries: List<Country>) {
+            recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = MainAdapter(countries) // maybe
+
+        }
+    }
+
+
+
 
 //        val countries = mutableListOf<Country>()
 //        for (i in 0..20){
@@ -64,15 +118,10 @@ class MainActivity : AppCompatActivity() {
 //            layoutManager = LinearLayoutManager(this@MainActivity)
 //            adapter = MainAdapter(countries) // maybe
 //        }
-    }
-    private fun showData(countries: List<Country>) {
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = MainAdapter(countries) // maybe
-        }
-//        val country:TextView = findViewById(R.id.country_view) as TextView
-//        val cases:TextView = findViewById(R.id.cases_view) as TextView
-//
-//        searchView.setSearchableInfo(countries)
-    }
+//    private fun showData(countries: List<Country>) {
+//        recyclerView.apply {
+//            layoutManager = LinearLayoutManager(this@MainActivity)
+//            adapter = MainAdapter(countries) // maybe
+//        }
+//    }
 }
