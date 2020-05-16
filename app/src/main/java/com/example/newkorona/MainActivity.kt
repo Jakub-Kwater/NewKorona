@@ -11,11 +11,6 @@ import android.util.Log.d
 import android.widget.EditText
 import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
-<<<<<<< HEAD
-=======
-import com.example.newkorona.filter.DeathCountriesListFilter
-import com.example.newkorona.repository.CountriesRepository
->>>>>>> 548c4c6a0132c2b9579367f961b4e08c480c01dc
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,19 +21,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-<<<<<<< HEAD
     private val mainAdapter  = MainAdapter(emptyList())
     private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
     private var countryList: List<Country> = emptyList()
 
-=======
-    private val mainAdapter = MainAdapter(emptyList())
-    private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
-    private var countryList: List<Country> = emptyList()
-
-    private var countryRepository: CountriesRepository? = null
-
->>>>>>> 548c4c6a0132c2b9579367f961b4e08c480c01dc
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -58,17 +44,9 @@ class MainActivity : AppCompatActivity() {
         })
 
         recyclerView.apply {
-<<<<<<< HEAD
             layoutManager = LinearLayoutManager( this@MainActivity )
             adapter = mainAdapter
         }
-=======
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = mainAdapter
-        }
-
-        countryRepository?.fetchAllCountries { showData(countryList) }
->>>>>>> 548c4c6a0132c2b9579367f961b4e08c480c01dc
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://coronavirus-19-api.herokuapp.com/countries/?fbclid=IwAR0wZuXrAzDdY6q8rTQGLmun_-l6ZLVv6MLP8h67JC3Q2aHf8mVPRNpyNpU")
