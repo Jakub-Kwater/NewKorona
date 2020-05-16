@@ -10,14 +10,13 @@ import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.data_row.view.*
 
-class MainAdapter(private val countries: List<Country>) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+class MainAdapter(private var countries: List<Country>) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.data_row,parent,false)
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = countries.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val country = countries[position]
@@ -51,6 +50,12 @@ class MainAdapter(private val countries: List<Country>) : RecyclerView.Adapter<M
         holder.testsPM.text = newTestsPM
     }
 
+    fun updateCountriesList(newCountries: List<Country>){
+        this.countries = newCountries
+        notifyDataSetChanged()
+    }
+
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val country: TextView = itemView.country_view
         val cases: TextView = itemView.cases_view
@@ -68,10 +73,5 @@ class MainAdapter(private val countries: List<Country>) : RecyclerView.Adapter<M
 
     }
 
-
-
-    fun filteredList(filteredList:ArrayList<Country>){
-        println("Sernik")
-    }
-
+    override fun getItemCount(): Int = countries.size
 }

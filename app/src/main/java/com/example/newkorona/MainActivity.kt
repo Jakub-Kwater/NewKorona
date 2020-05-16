@@ -7,16 +7,10 @@ import android.text.TextWatcher
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
-import android.util.Log
 import android.util.Log.d
 import android.widget.EditText
-import android.widget.TextView
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.uiThread
-import java.net.URL
-import com.google.gson.Gson
-import kotlinx.android.synthetic.main.data_row.*
+import com.example.newkorona.filter.CountriesListFilter
+import com.example.newkorona.filter.CountriesListFilterImpl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +18,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
+
 class MainActivity : AppCompatActivity() {
+
+    private val mainAdapter  = MainAdapter(emptyList())
+    private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
+    private var countryList: List<Country> = emptyList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,20 +33,20 @@ class MainActivity : AppCompatActivity() {
 
         editText.addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
-                filter(s.toString())
+                val filteredList = countryListFilter.filter(countryList, s.toString())
+                showData(filteredList)
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
         })
 
-
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager( this@MainActivity )
+            adapter = mainAdapter
+        }
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://coronavirus-19-api.herokuapp.com/countries/?fbclid=IwAR0wZuXrAzDdY6q8rTQGLmun_-l6ZLVv6MLP8h67JC3Q2aHf8mVPRNpyNpU")
@@ -62,66 +62,17 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
-                showData(response.body()!!)
-                val valueForData = response.body()!!
+                response.body()?.let { newCountryList -> countryList = newCountryList }
+                showData(countryList)
                 d("TAG_KORONA", "ok")
                 d("TAG_KORONA", "List  size: " + response.body()!![2].country)
 
             }
         })
-
-        val listaDanych:List<Country> = api.fetchAllCountries().execute().body().orEmpty()
-
-        fun filter(text:String){
-            val filteredList:ArrayList<Country> = ArrayList<Country>()
-
-            for(item:Country in listaDanych){
-                if (item.country.toString().toLowerCase().contains(text.toLowerCase())){
-                    filteredList.add(item)
-                }
-            }
-
-            MainAdapter.filteredList()
-
-
-        }
     }
 
     private fun showData(countries: List<Country>) {
-            recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = MainAdapter(countries) // maybe
-
-        }
+            mainAdapter.updateCountriesList(countries)
     }
-
-
-
-
-//        val countries = mutableListOf<Country>()
-//        for (i in 0..20){
-//            countries.add(Country("Freljord",
-//                12343,
-//                234,
-//                6,
-//                4,
-//                22,
-//                23,
-//                23,
-//                234,
-//                234,
-//                5,
-//                4))
-//        }
-
-//        recyclerView.apply {
-//            layoutManager = LinearLayoutManager(this@MainActivity)
-//            adapter = MainAdapter(countries) // maybe
-//        }
-//    private fun showData(countries: List<Country>) {
-//        recyclerView.apply {
-//            layoutManager = LinearLayoutManager(this@MainActivity)
-//            adapter = MainAdapter(countries) // maybe
-//        }
-//    }
 }
+
