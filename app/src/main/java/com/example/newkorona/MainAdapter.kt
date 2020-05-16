@@ -17,7 +17,10 @@ class MainAdapter(private var countries: List<Country>) : RecyclerView.Adapter<M
         return ViewHolder(view)
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 548c4c6a0132c2b9579367f961b4e08c480c01dc
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val country = countries[position]
 
@@ -50,12 +53,20 @@ class MainAdapter(private var countries: List<Country>) : RecyclerView.Adapter<M
         holder.testsPM.text = newTestsPM
     }
 
+<<<<<<< HEAD
     fun updateCountriesList(newCountries: List<Country>){
         this.countries = newCountries
         notifyDataSetChanged()
     }
 
 
+=======
+    fun updateCountriesList (newCountries: List<Country>) {
+        countries = newCountries
+        notifyDataSetChanged()
+    }
+
+>>>>>>> 548c4c6a0132c2b9579367f961b4e08c480c01dc
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val country: TextView = itemView.country_view
         val cases: TextView = itemView.cases_view
