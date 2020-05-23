@@ -6,24 +6,19 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
-
-import android.util.Log.d
 import android.widget.EditText
 import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
-
+import com.example.newkorona.repository.CountriesRepository
+import com.example.newkorona.repository.CountriesRepositoryImpl
 
 class MainActivity : AppCompatActivity() {
 
     private val mainAdapter  = MainAdapter(emptyList())
     private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
     private var countryList: List<Country> = emptyList()
+
+    private val countryRepository : CountriesRepository? = CountriesRepositoryImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,28 +43,8 @@ class MainActivity : AppCompatActivity() {
             adapter = mainAdapter
         }
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://coronavirus-19-api.herokuapp.com/countries/?fbclid=IwAR0wZuXrAzDdY6q8rTQGLmun_-l6ZLVv6MLP8h67JC3Q2aHf8mVPRNpyNpU")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val api = retrofit.create(ApiService::class.java)
-
-
-        api.fetchAllCountries().enqueue(object : Callback<List<Country>> {
-            override fun onFailure(call: Call<List<Country>>, t: Throwable) {
-                d("TAG_KORONA", "error" + t.message)
-            }
-
-            override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
-                response.body()?.let { newCountryList -> countryList = newCountryList }
-                showData(countryList)
-                d("TAG_KORONA", "ok")
-                d("TAG_KORONA", "List  size: " + response.body()!![2].country)
-
-            }
-        })
-    }
+        countryRepository?.fetchAllCountries { showData(countryList) }
+   }
 
     private fun showData(countries: List<Country>) {
             mainAdapter.updateCountriesList(countries)
