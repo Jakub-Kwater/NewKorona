@@ -43,7 +43,9 @@ class MainActivity : AppCompatActivity() {
             adapter = mainAdapter
         }
 
-        countryRepository?.fetchAllCountries { showData(countryList) }
+        countryRepository?.fetchAllCountries {
+            countryList = it
+            showData(countryList) }
    }
 
     private fun showData(countries: List<Country>) {
