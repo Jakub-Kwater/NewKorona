@@ -2,33 +2,40 @@ package com.example.newkorona
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 import android.widget.EditText
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+=======
+import android.widget.EditText
+>>>>>>> master
 import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepository
 import com.example.newkorona.repository.CountriesRepositoryImpl
+<<<<<<< HEAD
 >>>>>>> Stashed changes
-
-import android.util.Log
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.uiThread
-import java.net.URL
-import com.google.gson.Gson
-
-
+=======
+>>>>>>> master
 
 class MainActivity : AppCompatActivity() {
+
+    private val mainAdapter  = MainAdapter(emptyList())
+    private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
+    private var countryList: List<Country> = emptyList()
+
+    private val countryRepository : CountriesRepository? = CountriesRepositoryImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         recyclerView.layoutManager = LinearLayoutManager(this)
 //        recyclerView.adapter = MainAdapter()
@@ -46,38 +53,34 @@ class MainActivity : AppCompatActivity() {
             countryRepository?.fetchAllCountries{showData(countryList)}
         }
 >>>>>>> Stashed changes
+=======
+        val editText:EditText = findViewById(R.id.editText)
+>>>>>>> master
 
-        doAsync {
-            Request().run()
-            uiThread {
-                longToast("Request performed")
+        editText.addTextChangedListener(object:TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                val filteredList = countryListFilter.filter(countryList, s.toString())
+                showData(filteredList)
             }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+        })
+
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager( this@MainActivity )
+            adapter = mainAdapter
         }
 
+        countryRepository?.fetchAllCountries {
+            countryList = it
+            showData(countryList) }
+   }
+
+    private fun showData(countries: List<Country>) {
+            mainAdapter.updateCountriesList(countries)
     }
 }
 
-//val persons:ArrayList<Data>  = Gson().fromJson(response, new TypeToken<List<PersonModel>>(){}.getType())
-
-class HomeFeed:ArrayList<Data>()
-
-class Data(val country: String, val cases: Int, val todayCases: Int, val deaths: Int, val todayDeaths: Int,
-           val recovered: Int, val active: Int, val critical: Int, val casesPerOneMillion: Int,
-           val deathsPerOneMillion: Int, val totalTests: Int, val testsPerOneMillion: Int)
-
-class Request {
-
-    companion object{
-        val url = "http://coronavirus-19-api.herokuapp.com/countries/?fbclid=IwAR1Dka65-zF7Gx6SenmP7gocy34ykgDANM4aM_tAnL66iaxYnHFjF0Mev8g"
-    }
-    fun run():Array<Data>{
-        val repoListJsonStr = URL(url).readText()
-
-        val prasedData = Gson().fromJson(repoListJsonStr, Array<Data>::class.java) // próbowałem tu wstawić formę z array list ale nie działa i nie jestem pewien czemu
-        Log.d(javaClass.simpleName, prasedData.toString())
-        return prasedData
-    }
-
-}
-
-val data:Array<Data> = Request().run()

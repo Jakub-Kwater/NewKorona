@@ -18,7 +18,10 @@ class CountriesRepositoryImpl : CountriesRepository {
 
     val api = retrofit.create(ApiService::class.java)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     override fun fetchAllCountries(onCountriesFetched: (List<Country>) -> Unit) {
         api.fetchAllCountries().enqueue(object : Callback<List<Country>> {
             override fun onFailure(call: Call<List<Country>>, t: Throwable) {
