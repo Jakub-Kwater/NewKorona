@@ -38,4 +38,13 @@ dependencies {
 
     implementation "org.jetbrains.anko:anko-common:0.10.8" // zmiany wg MD,
     implementation 'com.google.code.gson:gson:2.8.6'
+<<<<<<< Updated upstream
+=======
+
+    //retrofit section
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
+>>>>>>> Stashed changes
 }

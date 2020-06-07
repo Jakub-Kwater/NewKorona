@@ -4,6 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+<<<<<<< Updated upstream
+=======
+import android.widget.EditText
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.newkorona.filter.CountriesListFilter
+import com.example.newkorona.filter.CountriesListFilterImpl
+import com.example.newkorona.repository.CountriesRepository
+import com.example.newkorona.repository.CountriesRepositoryImpl
+>>>>>>> Stashed changes
 
 import android.util.Log
 import org.jetbrains.anko.doAsync
@@ -20,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+<<<<<<< Updated upstream
         recyclerView.layoutManager = LinearLayoutManager(this)
 //        recyclerView.adapter = MainAdapter()
 
@@ -28,6 +38,14 @@ class MainActivity : AppCompatActivity() {
 
     fun fetchJson() {
 
+=======
+        val editText:EditText = findViewById(R.id.editText)
+        val swipeRefreshLayout:SwipeRefreshLayout = findViewById(R.id.refresh)
+
+        swipeRefreshLayout.setOnRefreshListener{
+            countryRepository?.fetchAllCountries{showData(countryList)}
+        }
+>>>>>>> Stashed changes
 
         doAsync {
             Request().run()
