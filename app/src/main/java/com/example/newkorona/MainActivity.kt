@@ -7,10 +7,12 @@ import android.text.TextWatcher
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.EditText
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepository
 import com.example.newkorona.repository.CountriesRepositoryImpl
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,7 +26,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         val editText:EditText = findViewById(R.id.editText)
+        val swipeRefreshLayout:SwipeRefreshLayout = findViewById(R.id.refresh)
+
+        swipeRefreshLayout.setOnRefreshListener{
+            countryRepository?.fetchAllCountries{showData(countryList)}
+        }
 
         editText.addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
