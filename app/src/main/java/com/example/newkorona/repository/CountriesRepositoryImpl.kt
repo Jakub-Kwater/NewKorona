@@ -12,13 +12,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 class CountriesRepositoryImpl : CountriesRepository {
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://coronavirus-19-api.herokuapp.com/countries/?fbclid=IwAR0wZuXrAzDdY6q8rTQGLmun_-l6ZLVv6MLP8h67JC3Q2aHf8mVPRNpyNpU")
+        .baseUrl("http://coronavirus-19-api.herokuapp.com")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     val api = retrofit.create(ApiService::class.java)
 
     override fun fetchAllCountries(onCountriesFetched: (List<Country>) -> Unit) {
+
         api.fetchAllCountries().enqueue(object : Callback<List<Country>> {
             override fun onFailure(call: Call<List<Country>>, t: Throwable) {
                 Log.d("TAG_KORONA", "error" + t.message)

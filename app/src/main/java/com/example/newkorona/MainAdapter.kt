@@ -1,12 +1,10 @@
 package com.example.newkorona
 
-import android.util.Log
-import android.util.Log.d
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.data_row.view.*
 
@@ -34,7 +32,6 @@ class MainAdapter(private var countries: List<Country>) : RecyclerView.Adapter<M
         val newTotalTests:String = "Total tests: ${country.totalTests}"
         val newTestsPM:String = "Tests per million: ${country.testsPerOneMillion}"
 
-        //d("TAG_KORONA", "List  size: " + country.cases)
 
         holder.country.text = newCountry
         holder.cases.text = newCases
