@@ -3,4 +3,4 @@
   <domain-config cleartextTrafficPermitted="true">
     <domain includeSubdomains="true">coronavirus-19-api.herokuapp.com</domain>
   </domain-config>
-</network-security-config> 
+</network-security-config>

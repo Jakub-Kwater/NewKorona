@@ -19,8 +19,8 @@ class MainActivity : AppCompatActivity() {
     private val mainAdapter  = MainAdapter(emptyList())
     private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
     private var countryList: List<Country> = emptyList()
-
     private val countryRepository : CountriesRepository? = CountriesRepositoryImpl()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
             countryList = it
             showData(countryList) }
    }
+
 
     private fun showData(countries: List<Country>) {
             mainAdapter.updateCountriesList(countries)

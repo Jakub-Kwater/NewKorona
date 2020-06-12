@@ -32,7 +32,6 @@ class MainAdapter(private var countries: List<Country>) : RecyclerView.Adapter<M
         val newTotalTests:String = "Total tests: ${country.totalTests}"
         val newTestsPM:String = "Tests per million: ${country.testsPerOneMillion}"
 
-        //d("TAG_KORONA", "List  size: " + country.cases)
 
         holder.country.text = newCountry
         holder.cases.text = newCases
