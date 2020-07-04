@@ -12,6 +12,8 @@ import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepository
 import com.example.newkorona.repository.CountriesRepositoryImpl
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +21,8 @@ class MainActivity : AppCompatActivity() {
     private val mainAdapter  = MainAdapter(emptyList())
     private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
     private var countryList: List<Country> = emptyList()
-    private val countryRepository : CountriesRepository? = CountriesRepositoryImpl()
+    private val api:ApiService = ApiFactory.create()
+    private val countryRepository : CountriesRepository? = CountriesRepositoryImpl(api = api)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,11 +31,11 @@ class MainActivity : AppCompatActivity() {
 
 
         val editText:EditText = findViewById(R.id.editText)
-        val swipeRefreshLayout:SwipeRefreshLayout = findViewById(R.id.refresh)
-
-        swipeRefreshLayout.setOnRefreshListener{
-            countryRepository?.fetchAllCountries{showData(countryList)}
-        }
+////        val swipeRefreshLayout:SwipeRefreshLayout = findViewById(R.id.refresh)
+//
+//        swipeRefreshLayout.setOnRefreshListener{
+//            countryRepository?.fetchAllCountries{showData(countryList)}
+//        }
 
         editText.addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
@@ -51,9 +54,20 @@ class MainActivity : AppCompatActivity() {
             adapter = mainAdapter
         }
 
-        countryRepository?.fetchAllCountries {
-            countryList = it
-            showData(countryList) }
+        countryRepository
+            ?.fetchAllCountriesSingle()
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe({
+                countryList= it
+                showData(countryList)
+            },{
+
+            })
+
+//        countryRepository?.fetchAllCountries {
+//            countryList = it
+//            showData(countryList) }
    }
 
 
