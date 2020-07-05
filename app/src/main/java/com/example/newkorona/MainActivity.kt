@@ -31,11 +31,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val editText:EditText = findViewById(R.id.editText)
-////        val swipeRefreshLayout:SwipeRefreshLayout = findViewById(R.id.refresh)
-//
-//        swipeRefreshLayout.setOnRefreshListener{
-//            countryRepository?.fetchAllCountries{showData(countryList)}
-//        }
+
 
         editText.addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
@@ -65,9 +61,6 @@ class MainActivity : AppCompatActivity() {
 
             })
 
-//        countryRepository?.fetchAllCountries {
-//            countryList = it
-//            showData(countryList) }
    }
 
 
