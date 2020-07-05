@@ -25,8 +25,11 @@ class CountriesRepositoryImplTestMockito {
             val testList = listOf<Country>(countryA,countryB,countryC)
 
 //            whenever(apiService.fetchAllCountriesSingle()) doReturn Single.just(testList) //well it did not work
+//            doReturn(Single.just(testList)).`when`(repositoryImpl.fetchAllCountriesSingle())
+//            doReturn(Single.just(testList)).whenever(repositoryImpl.fetchAllCountriesSingle())
+//            whenever(apiService.fetchAllCountriesSingle()) doReturn Single.just(testList)
 
-            doReturn(Single.just(testList)).`when`(repositoryImpl.fetchAllCountriesSingle())
+        whenever(repositoryImpl.fetchAllCountriesSingle()) doReturn io.reactivex.Single.just(testList) // I'm not sure why does it work for both apiService.fetch... and repositoryIml.fetch...
 
 
             //when
