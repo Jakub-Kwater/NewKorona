@@ -7,10 +7,13 @@ import android.text.TextWatcher
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.EditText
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepository
 import com.example.newkorona.repository.CountriesRepositoryImpl
+import com.example.newkorona.roomDataBase.CountryDAO
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -59,6 +62,11 @@ class MainActivity : AppCompatActivity() {
             },{
 
             })
+
+//        @Database(entities = arrayOf(CountryEntity::class), version = 1)
+//        abstract class AppDatabase : RoomDatabase() {
+//            abstract fun countryDAO(): CountryDAO
+//        }
 
    }
 
