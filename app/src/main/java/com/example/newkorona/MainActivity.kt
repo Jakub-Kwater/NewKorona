@@ -7,7 +7,6 @@ import android.text.TextWatcher
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.EditText
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepository
