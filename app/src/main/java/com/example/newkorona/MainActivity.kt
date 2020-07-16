@@ -23,8 +23,13 @@ class MainActivity : AppCompatActivity() {
     private val mainAdapter  = MainAdapter(emptyList())
     private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
     private var countryList: List<Country> = emptyList()
+
     private val api:ApiService = ApiFactory.create()
     private val countryRepository : CountriesRepository? = CountriesRepositoryImpl(api = api)
+
+    private val dataBase: AppDatabase = dbFactory.create(this@MainActivity)
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,14 +68,7 @@ class MainActivity : AppCompatActivity() {
 
             })
 
-//        @Database(entities = arrayOf(CountryEntity::class), version = 1)
-//        abstract class AppDatabase : RoomDatabase() {
-//            abstract fun countryDAO(): CountryDAO
-//        }
-
    }
-
-
     private fun showData(countries: List<Country>) {
             mainAdapter.updateCountriesList(countries)
     }
