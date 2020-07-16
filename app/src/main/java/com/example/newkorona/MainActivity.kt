@@ -13,7 +13,6 @@ import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepository
 import com.example.newkorona.repository.CountriesRepositoryImpl
-import com.example.newkorona.roomDataBase.CountryDAO
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private val api:ApiService = ApiFactory.create()
     private val countryRepository : CountriesRepository? = CountriesRepositoryImpl(api = api)
 
-    private val dataBase: AppDatabase = dbFactory.create(this@MainActivity)
+    private lateinit var dataBase: AppDatabase
 
 
 
@@ -35,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        dataBase = dbFactory.create(this)
 
 
         val editText:EditText = findViewById(R.id.editText)
