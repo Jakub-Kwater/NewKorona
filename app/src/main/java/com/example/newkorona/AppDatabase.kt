@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 import com.example.newkorona.roomDataBase.CountryDAO
 
 
-@Database(entities = arrayOf(CountryEntity::class), version = 1)
+@Database(entities = [CountryEntity::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun countryDAO(): CountryDAO
 }
