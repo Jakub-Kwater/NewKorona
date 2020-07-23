@@ -4,12 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log.d
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.EditText
-import androidx.room.Database
-import androidx.room.RoomDatabase
 import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepository
@@ -28,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     private val countryRepository : CountriesRepository? = CountriesRepositoryImpl(api = api)
 
     private lateinit var dataBase: AppDatabase
-    private var countryEntityList: List<CountryEntity> = emptyList()
 
 
 
@@ -62,28 +58,65 @@ class MainActivity : AppCompatActivity() {
             adapter = mainAdapter
         }
 
+
         countryRepository
             ?.fetchAllCountriesSingle()
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
+            ?.onErrorReturnItem(
+                dataBase.countryDAO().getAll().map { CountryEntity -> Country(
+                    country = CountryEntity.country,
+                    cases = CountryEntity.cases,
+                    todayCases = CountryEntity.todayCases,
+                    deaths = CountryEntity.deaths,
+                    todayDeaths = CountryEntity.todayDeaths,
+                    recovered = CountryEntity.recovered,
+                    active = CountryEntity.active,
+                    casesPerOneMillion = CountryEntity.casesPerOneMillion,
+                    totalTests = CountryEntity.totalTests,
+                    testsPerOneMillion = CountryEntity.testsPerOneMillion,
+                    deathsPerOneMillion = CountryEntity.deathsPerOneMillion,
+                    critical = CountryEntity.critical
+                    )
+                }
+            )
             ?.subscribe({
                 countryList= it
-                for (c in it.indices){
-                    countryEntityList.get(c).deaths = it.get(c).deaths // changed val into var in CountryEntity, this does not seem to be correct method
+                val countryEntityList = countryList.map {  country -> CountryEntity(
+                    country = country.country,
+                    cases = country.cases,
+                    todayCases = country.todayCases,
+                    deaths = country.deaths,
+                    todayDeaths = country.todayDeaths,
+                    recovered = country.recovered,
+                    active = country.active,
+                    casesPerOneMillion = country.casesPerOneMillion,
+                    totalTests = country.totalTests,
+                    testsPerOneMillion = country.testsPerOneMillion,
+                    deathsPerOneMillion = country.deathsPerOneMillion,
+                    critical = country.critical
+                    )
                 }
-                dataBase.countryDAO().insertAll(countryEntityList)
+
+
+                dataBase.countryDAO()
+                    .insertAll(countryEntityList)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
+
+
+                    dataBase.clearAllTables()
+                    dataBase.countryDAO().insertAll(countryEntityList)
                 showData(countryList)
             },{
 
             })
 
-        //        dataBase.countryDAO().insertCountry(CountryEntity(country = "A", cases = 2, todayCases = 2, deaths = 2, todayDeaths = 2, recovered = 2, active = 2, critical = 2, deathsPerOneMillion = 2, testsPerOneMillion = 2, totalTests = 2, casesPerOneMillion = 2))
-        val allCountries = dataBase.countryDAO().getAll()
-        d("country size", "getAll size = ${allCountries.size}")
-
    }
     private fun showData(countries: List<Country>) {
             mainAdapter.updateCountriesList(countries)
     }
+
 }
 
