@@ -1,9 +1,6 @@
 package com.example.newkorona.roomDataBase
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.newkorona.Country
 import com.example.newkorona.CountryEntity
 import io.reactivex.Completable
@@ -13,7 +10,7 @@ interface CountryDAO {
     @Query("SELECT * FROM countryEntity")
     fun getAll(): List<CountryEntity>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(countries: List<CountryEntity>) : Completable
 
     @Insert

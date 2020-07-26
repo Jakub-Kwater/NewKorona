@@ -28,18 +28,12 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         dataBase = dbFactory.create(this)
 
-
         val editText:EditText = findViewById(R.id.editText)
-
-
-
-
 
         editText.addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
@@ -64,49 +58,20 @@ class MainActivity : AppCompatActivity() {
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.onErrorReturnItem(
-                dataBase.countryDAO().getAll().map { CountryEntity -> Country(
-                    country = CountryEntity.country,
-                    cases = CountryEntity.cases,
-                    todayCases = CountryEntity.todayCases,
-                    deaths = CountryEntity.deaths,
-                    todayDeaths = CountryEntity.todayDeaths,
-                    recovered = CountryEntity.recovered,
-                    active = CountryEntity.active,
-                    casesPerOneMillion = CountryEntity.casesPerOneMillion,
-                    totalTests = CountryEntity.totalTests,
-                    testsPerOneMillion = CountryEntity.testsPerOneMillion,
-                    deathsPerOneMillion = CountryEntity.deathsPerOneMillion,
-                    critical = CountryEntity.critical
-                    )
-                }
+                CountryEntityToCountryMapping.create(dataBase.countryDAO().getAll())
             )
             ?.subscribe({
                 countryList= it
-                val countryEntityList = countryList.map {  country -> CountryEntity(
-                    country = country.country,
-                    cases = country.cases,
-                    todayCases = country.todayCases,
-                    deaths = country.deaths,
-                    todayDeaths = country.todayDeaths,
-                    recovered = country.recovered,
-                    active = country.active,
-                    casesPerOneMillion = country.casesPerOneMillion,
-                    totalTests = country.totalTests,
-                    testsPerOneMillion = country.testsPerOneMillion,
-                    deathsPerOneMillion = country.deathsPerOneMillion,
-                    critical = country.critical
-                    )
-                }
-
+                val countryEntityList = CountryToCountryEntityMapping.create(countryList)
 
                 dataBase.countryDAO()
                     .insertAll(countryEntityList)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
+                    .subscribe() // I don't know why would I remove this line
 
 
-                    dataBase.clearAllTables()
+                    dataBase.clearAllTables() // removal of this line will create multiple records of data within database
                     dataBase.countryDAO().insertAll(countryEntityList)
                 showData(countryList)
             },{
