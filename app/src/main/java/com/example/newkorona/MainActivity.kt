@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log.d
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.EditText
@@ -68,11 +69,11 @@ class MainActivity : AppCompatActivity() {
                     .insertAll(countryEntityList)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe() // I don't know why would I remove this line
+                    .subscribe() // I don't know why would I remove this line, yup that one must stay for without
 
-
-                    dataBase.clearAllTables() // removal of this line will create multiple records of data within database
+                    dataBase.countryDAO().delete(dataBase.countryDAO().getAll())
                     dataBase.countryDAO().insertAll(countryEntityList)
+                d("precise_tag","number of countries: ${countryList.size}")
                 showData(countryList)
             },{
 

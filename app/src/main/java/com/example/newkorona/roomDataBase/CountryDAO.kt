@@ -14,7 +14,7 @@ interface CountryDAO {
     fun insertAll(countries: List<CountryEntity>) : Completable
 
     @Insert
-    fun insertCountry(country: CountryEntity)
+    fun insertCountry(country: CountryEntity) : Completable
 
     @Delete
     fun delete(country: List<CountryEntity>)
