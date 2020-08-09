@@ -5,10 +5,9 @@ import com.example.newkorona.Country
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import io.reactivex.Single
 import org.junit.Test
 
-import org.junit.Assert.*
-import rx.Single
 
 class CountriesRepositoryImplTestMockito {
 
@@ -25,7 +24,7 @@ class CountriesRepositoryImplTestMockito {
             val testList = listOf<Country>(countryA,countryB,countryC)
 
 
-        whenever(repositoryImpl.fetchAllCountriesSingle()) doReturn io.reactivex.Single.just(testList)
+        whenever(repositoryImpl.fetchAllCountriesSingle()) doReturn Single.just(testList)
 
 
             //when
