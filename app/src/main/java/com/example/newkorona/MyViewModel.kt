@@ -8,6 +8,7 @@ import com.example.newkorona.repository.CountriesRepository
 import com.example.newkorona.repository.CountriesRepositoryImpl
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.reactivestreams.Publisher
 
 class MyViewModel: ViewModel() {
     private val api:ApiService = ApiFactory.create()
@@ -16,13 +17,14 @@ class MyViewModel: ViewModel() {
     private var countryList: List<Country> = emptyList()
     private lateinit var dataBase: AppDatabase
 
-    private val countries = MutableLiveData<List<Country>>()
 
-    fun getCountries(): List<Country> {
-        return countries.value!!
+    fun getCountries(): LiveData<List<Country>> {
+        loadCountries()
+        val countries:LiveData<List<Country>> = LiveDataReactiveStreams.fromPublisher(Publisher {  countryRepository?.fetchAllCountriesSingle()})
+        return countries
     }
 
-    fun loadCountries() {
+    private fun loadCountries() {
 
 
         countryRepository
@@ -33,7 +35,7 @@ class MyViewModel: ViewModel() {
                 CountryEntityToCountryMapping.create(dataBase.countryDAO().getAll())
             )
             ?.subscribe({
-                countryList= it
+                countryList = it
                 val countryEntityList = CountryToCountryEntityMapping.create(countryList)
 
                 dataBase.countryDAO()
@@ -47,6 +49,7 @@ class MyViewModel: ViewModel() {
             },{
 
             })
+
 
     }
 

@@ -8,12 +8,15 @@ import android.util.Log.d
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.EditText
+import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepository
 import com.example.newkorona.repository.CountriesRepositoryImpl
+import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -30,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dataBase: AppDatabase
 
     lateinit var viewModel: MyViewModel
+    var countryWIP: List<Country> =  LiveDataReactiveStreams.toPublisher(viewModel.getCountries())
 
 
 
@@ -42,8 +46,6 @@ class MainActivity : AppCompatActivity() {
         val editText:EditText = findViewById(R.id.editText)
 
 
-
-        viewModel.loadCountries()
         viewModel.getCountries()
 
 
