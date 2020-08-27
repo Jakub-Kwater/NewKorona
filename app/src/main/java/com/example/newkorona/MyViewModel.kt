@@ -1,11 +1,9 @@
 package com.example.newkorona
 
-import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.newkorona.filter.CountriesListFilter
-import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepository
 import com.example.newkorona.repository.CountriesRepositoryImpl
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,17 +13,16 @@ class MyViewModel: ViewModel() {
     private val api:ApiService = ApiFactory.create()
     private val countryRepository : CountriesRepository? = CountriesRepositoryImpl(api = api)
 
-    private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
     private var countryList: List<Country> = emptyList()
     private lateinit var dataBase: AppDatabase
 
     private val countries = MutableLiveData<List<Country>>()
 
-    fun getCountries(): LiveData<List<Country>> {
-        return countries
+    fun getCountries(): List<Country> {
+        return countries.value!!
     }
 
-    private fun loadCountries() {
+    fun loadCountries() {
 
 
         countryRepository
@@ -47,12 +44,9 @@ class MyViewModel: ViewModel() {
 
                 dataBase.countryDAO().delete(dataBase.countryDAO().getAll())
                 dataBase.countryDAO().insertAll(countryEntityList)
-                Log.d("precise_tag", "number of countries: ${countryList.size}")
-                showData(countryList)
             },{
 
             })
-
 
     }
 
