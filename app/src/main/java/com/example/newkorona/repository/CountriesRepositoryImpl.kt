@@ -1,18 +1,23 @@
 package com.example.newkorona.repository
 
-import android.util.Log
-import com.example.newkorona.ApiService
-import com.example.newkorona.Country
+import com.example.newkorona.*
 import io.reactivex.Single
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import io.reactivex.schedulers.Schedulers
 
-class CountriesRepositoryImpl(private val api:ApiService) : CountriesRepository {
+class CountriesRepositoryImpl(
+    private val api: ApiService,
+    private val appDatabase: AppDatabase) :
+    CountriesRepository {
+
+    private val dao = appDatabase.countryDAO()
 
     override fun fetchAllCountriesSingle(): Single<List<Country>> {
-        return api.fetchAllCountriesSingle()
+        return api
+            .fetchAllCountriesSingle()
+            .doOnSuccess { countryList ->
+                dao.delete(dao.getAll())
+                dao.insertAll(CountryToCountryEntityMapping.create(countryList))
+            }
+            .onErrorReturnItem(CountryEntityToCountryMapping.create(dao.getAll()))
     }
 }
