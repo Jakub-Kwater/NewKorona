@@ -1,1 +1,0 @@
-Aplikacja do śledzenia statystyk COVID-19
