@@ -11,10 +11,10 @@ interface CountryDAO {
     fun getAll(): List<CountryEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(countries: List<CountryEntity>) : Completable
+    fun insertAll(countries: List<CountryEntity>)
 
     @Insert
-    fun insertCountry(country: CountryEntity) : Completable
+    fun insertCountry(country: CountryEntity)
 
     @Delete
     fun delete(country: List<CountryEntity>)

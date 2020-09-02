@@ -1,24 +1,18 @@
-package com.example.newkorona
+package com.example.newkorona.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log.d
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.EditText
-import androidx.lifecycle.LiveDataReactiveStreams
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
+import com.example.newkorona.*
 import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
-import com.example.newkorona.repository.CountriesRepository
 import com.example.newkorona.repository.CountriesRepositoryImpl
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,27 +21,19 @@ class MainActivity : AppCompatActivity() {
     private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
     private var countryList: List<Country> = emptyList()
 
-    private val api:ApiService = ApiFactory.create()
-    private val countryRepository : CountriesRepository? = CountriesRepositoryImpl(api = api)
-
-    private lateinit var dataBase: AppDatabase
-
-    lateinit var viewModel: MyViewModel
-    var countryWIP: List<Country> =  LiveDataReactiveStreams.toPublisher(viewModel.getCountries())
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        dataBase = dbFactory.create(this)
+
+        val model: MyViewModel by viewModels{
+            MyViewModelFactory(CountriesRepositoryImpl(api = ApiFactory.create(), appDatabase = dbFactory.create(context = this)))
+        }
+        model.countryData.observe(this, Observer { updatedCountryList ->
+            countryList = updatedCountryList
+            showData(countryList)
+        })
 
         val editText:EditText = findViewById(R.id.editText)
-
-
-        viewModel.getCountries()
-
 
         editText.addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
@@ -65,10 +51,6 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager( this@MainActivity )
             adapter = mainAdapter
         }
-
-
-        showData(viewModel.getCountries())
-
    }
     private fun showData(countries: List<Country>) {
             mainAdapter.updateCountriesList(countries)
