@@ -1,9 +1,6 @@
 package com.example.newkorona.roomDataBase
 
 import androidx.room.*
-import com.example.newkorona.Country
-import com.example.newkorona.CountryEntity
-import io.reactivex.Completable
 
 @Dao
 interface CountryDAO {

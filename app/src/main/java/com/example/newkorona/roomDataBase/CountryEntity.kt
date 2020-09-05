@@ -1,4 +1,4 @@
-package com.example.newkorona
+package com.example.newkorona.roomDataBase
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

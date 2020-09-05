@@ -10,35 +10,31 @@ import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.example.newkorona.*
-import com.example.newkorona.filter.CountriesListFilter
 import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepositoryImpl
+import com.example.newkorona.roomDataBase.dbFactory
 
 
 class MainActivity : AppCompatActivity() {
 
     private val mainAdapter  = MainAdapter(emptyList())
-    private val countryListFilter: CountriesListFilter = CountriesListFilterImpl()
-    private var countryList: List<Country> = emptyList()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val model: MyViewModel by viewModels{
-            MyViewModelFactory(CountriesRepositoryImpl(api = ApiFactory.create(), appDatabase = dbFactory.create(context = this)))
+            MyViewModelFactory(CountriesRepositoryImpl(api = ApiFactory.create(), appDatabase = dbFactory.create(context = this)), CountriesListFilterImpl())
         }
-        model.countryData.observe(this, Observer { updatedCountryList ->
-            countryList = updatedCountryList
-            showData(countryList)
+        model.filteredCountryData.observe(this, Observer { updatedCountryList ->
+            showData(updatedCountryList)
         })
-
         val editText:EditText = findViewById(R.id.editText)
 
         editText.addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(s: Editable?) {
-                val filteredList = countryListFilter.filter(countryList, s.toString())
-                showData(filteredList)
+                model.dataFilter(s.toString())
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
@@ -55,6 +51,4 @@ class MainActivity : AppCompatActivity() {
     private fun showData(countries: List<Country>) {
             mainAdapter.updateCountriesList(countries)
     }
-
 }
-

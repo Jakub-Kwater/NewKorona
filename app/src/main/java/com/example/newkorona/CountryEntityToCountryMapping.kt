@@ -1,5 +1,7 @@
 package com.example.newkorona
 
+import com.example.newkorona.roomDataBase.CountryEntity
+
 object CountryEntityToCountryMapping{
     fun create(countryEntities: List<CountryEntity>): List<Country> =  countryEntities.map { CountryEntity -> Country(
         country = CountryEntity.country,
