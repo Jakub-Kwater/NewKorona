@@ -13,7 +13,7 @@ import com.example.newkorona.*
 import com.example.newkorona.filter.CountriesListFilterImpl
 import com.example.newkorona.repository.CountriesRepositoryImpl
 import com.example.newkorona.roomDataBase.dbFactory
-
+import com.example.newkorona.filter.CountriesListFilter
 
 class MainActivity : AppCompatActivity() {
 

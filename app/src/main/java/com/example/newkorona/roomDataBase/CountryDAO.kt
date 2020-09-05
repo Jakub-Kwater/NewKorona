@@ -2,6 +2,7 @@ package com.example.newkorona.roomDataBase
 
 import androidx.room.*
 
+
 @Dao
 interface CountryDAO {
     @Query("SELECT * FROM countryEntity")
@@ -15,5 +16,4 @@ interface CountryDAO {
 
     @Delete
     fun delete(country: List<CountryEntity>)
-
 }
